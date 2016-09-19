@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Memory Game</string>
+    <string name="rule1">\u2022 The user can touch any two tiles, one at a time. Touching a tile will reveal its image.</string>
+    <string name="rule2">\u2022 If the two tiles have matching images, they will disappear and the user gets a point.</string>
+    <string name="rule3">\u2022 If the two tiles don\'t have matching images, they will flip back over to being tiles.</string>
+</resources>
