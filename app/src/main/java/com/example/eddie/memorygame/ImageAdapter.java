@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 
 /**
  * Created by Eddie on 9/15/2016.
@@ -44,7 +43,7 @@ public class ImageAdapter extends BaseAdapter implements Serializable {
             R.drawable.windows, R.drawable.mario,
             R.drawable.grad, R.drawable.notepad
     };
-                                        //TODO: Need to save the state on back-button and orientation. Also need to shuffle the images array on startup
+
     public ImageAdapter(Context context) {
         this.context = context;
     }
@@ -130,6 +129,25 @@ public class ImageAdapter extends BaseAdapter implements Serializable {
             int tmp = images[index];
             images[index] = images[i];
             images[i] = tmp;
+        }
+    }
+
+    public void shuffle(int tileCount) {
+        int tilesLeft = 10 - (tileCount * 2); // get amount of tiles left
+        int oldTiles[] = new int[tiles.length];
+        for(int i = 0; i < tiles.length; i++)
+            oldTiles[i] = tiles[i];
+        Random rnd = ThreadLocalRandom.current();
+        int tmpIndex = rnd.nextInt(oldTiles.length - 1);
+
+        for (int i = 0; i < tilesLeft; i++) {
+            if (tiles[i] == blank) {
+                while (oldTiles[tmpIndex] == blank || tmpIndex <= i)
+                    tmpIndex = rnd.nextInt(tiles.length);
+                tiles[i] = oldTiles[tmpIndex];
+                tiles[tmpIndex] = blank;
+                oldTiles[tmpIndex] = blank;
+            }
         }
     }
 

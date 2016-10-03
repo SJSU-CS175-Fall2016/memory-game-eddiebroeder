@@ -19,7 +19,6 @@
         android:numColumns="4"
         android:stretchMode="columnWidth"
         android:gravity="center">
-
     </GridView>
 
     <TextView

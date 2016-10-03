@@ -28,14 +28,12 @@
         android:text="Play"
         android:onClick="playGame" />
 
-    <Button
-        android:id="@+id/rulesButton"
-        android:layout_width="180dp"
-        android:layout_height="90dp"
-        android:layout_below="@id/playButton"
-        android:layout_marginTop="25dp"
+    <fragment
+        android:name="com.example.eddie.memorygame.RuleFragment"
+        android:id="@+id/ruleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:text="Rules"
-        android:onClick="viewRules" />
+        android:layout_below="@id/playButton"/>
 
 </RelativeLayout>

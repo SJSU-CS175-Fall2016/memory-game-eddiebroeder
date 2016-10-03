@@ -1,29 +1,34 @@
 package com.example.eddie.memorygame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PlayActivity extends AppCompatActivity {
 
     private static final int ONE_SECOND = 1000;
     private static final int MATCH = -2;
     private static final int NOMATCH = -1;
-    private static final Integer[] testArray = new Integer[] {0, 1, 2};
     final ImageAdapter adapter = new ImageAdapter(this);
     ArrayList<Integer> matchedTiles = new ArrayList<>();
     int points[] = {0};
+    Animation slide, bounce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +38,17 @@ public class PlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play);
         final TextView pointsView = (TextView) findViewById(R.id.pointsText);
         final GridView gridView = (GridView) findViewById(R.id.tileGrid);
+        bounce = AnimationUtils.loadAnimation(this, R.anim.bounce);
+        gridView.setAnimation(bounce);
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                slide = AnimationUtils.loadAnimation(view.getContext(), R.anim.slide);
+                view.setAnimation(slide);
+                slide.startNow();
+
                 if (matchedTiles.contains(position))
                     return;
                 Handler handler = new Handler();
@@ -73,6 +84,31 @@ public class PlayActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.restart) {
+            SharedPreferences preferences = getSharedPreferences("TEST", Context.MODE_PRIVATE);
+            preferences.edit().clear().commit();
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.shuffle) {
+            adapter.shuffle();
+            adapter.shuffle(points[0]);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
